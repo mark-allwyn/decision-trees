@@ -4,8 +4,6 @@ Tree-based models dominate machine learning competitions and real-world applicat
 
 This guide takes you from the fundamentals of a single decision tree all the way through to mastering the three most powerful gradient boosting frameworks. Every concept is accompanied by a visualization generated from real code and real data, so you can see exactly what is happening at each step.
 
----
-
 ## Part 1: Foundations - What Is a Decision Tree?
 
 ### The "20 Questions" Mental Model
@@ -78,8 +76,6 @@ This is the classic overfitting curve. Training error (green) keeps decreasing a
 
 A very deep tree memorizes the training data, including its noise. It becomes a lookup table, not a generalizable model. **This is exactly why ensemble methods were invented.**
 
----
-
 ## Part 2: From One Tree to Many - Ensemble Methods
 
 Single decision trees have a fatal flaw: high variance. Train a tree on slightly different data, and you get a completely different model. The solution is to not rely on one tree, but to use many.
@@ -149,8 +145,6 @@ The algorithm is surprisingly simple:
 
 With each iteration, the model gets closer to the true values. The residuals shrink, and the next tree has less to correct. The "gradient" in gradient boosting refers to the fact that residuals are the negative gradient of the MSE loss function. We are doing gradient descent in function space.
 
----
-
 ## Part 3: XGBoost Deep Dive
 
 XGBoost (eXtreme Gradient Boosting) was released in 2014 and quickly became the dominant algorithm for structured data. It won countless competitions and became a go-to tool for data scientists worldwide.
@@ -197,8 +191,6 @@ Here is XGBoost trained on California Housing data with proper early stopping, s
 
 ![XGBoost training progress and predictions](images/13_visualize_training_progress_and_predictions.png)
 
----
-
 ## Part 4: LightGBM Deep Dive
 
 LightGBM (Light Gradient Boosting Machine) was released by Microsoft in 2017 with one primary goal: speed. It can train 10-20x faster than XGBoost on large datasets while achieving similar or better accuracy.
@@ -233,8 +225,6 @@ Here is a direct comparison on the same dataset:
 
 LightGBM typically matches or exceeds XGBoost accuracy while training significantly faster, especially on larger datasets.
 
----
-
 ## Part 5: CatBoost Deep Dive
 
 CatBoost (Categorical Boosting), released by Yandex in 2017, focuses on three innovations: superior categorical feature handling, ordered boosting to reduce overfitting, and symmetric trees for fast inference.
@@ -264,8 +254,6 @@ Symmetric trees provide built-in regularization (they cannot create arbitrarily 
 Here are all three frameworks compared on the same data:
 
 ![XGBoost vs LightGBM vs CatBoost comparison](images/18_compare_all_three_frameworks_so_far.png)
-
----
 
 ## Part 6: The Full Benchmark
 
@@ -306,8 +294,6 @@ In practice, most experienced practitioners start with LightGBM for speed during
 | Missing Values | Learns direction | Learns direction | Learns direction |
 | Key Innovation | Regularized objective | Speed optimizations | Ordered boosting |
 
----
-
 ## Part 7: Feature Importance and Explainability
 
 Understanding why a model makes predictions is crucial for trust, debugging, and extracting domain insights.
@@ -335,8 +321,6 @@ SHAP waterfall plots break down a single prediction, showing exactly which featu
 ![SHAP waterfall plot for a single prediction](images/22_shap_waterfall_plot___explain_a_single_prediction.png)
 
 This is invaluable for debugging unexpected predictions and explaining model behavior to stakeholders.
-
----
 
 ## Part 8: Practical Tips and Common Pitfalls
 
@@ -367,16 +351,6 @@ Start with 0.1, then try 0.05 and 0.01 with proportionally more trees.
 | Train dropping, val flat/rising | Overfitting | Reduce complexity, add regularization |
 | Both flat and high | Underfitting | Increase complexity |
 | Large gap between curves | High variance | Add regularization, more data |
-
-### When NOT to Use Tree-Based Models
-
-| Situation | Better Alternative |
-|-----------|--------------------|
-| Images, audio, video | Deep learning (CNNs) |
-| Text, NLP | Transformers |
-| Very high-dimensional sparse data | Linear models |
-| Tiny datasets (<100 rows) | Simple models |
-| Need smooth/continuous predictions | Neural networks |
 
 ### Common Parameter Recipes
 
@@ -416,17 +390,79 @@ model = LGBMRegressor(
 )
 ```
 
----
+## Part 9: Real-World Applications of Decision Trees
 
-## Part 9: Classification Example
+Tree-based models are not universally the best choice. Understanding where they excel and where they fall short is just as important as knowing how they work.
+
+### Where Decision Trees Excel
+
+**Finance and Risk Assessment**
+
+Credit scoring, fraud detection, and loan default prediction are classic decision tree territory. Financial data is tabular, features are well-defined (income, credit history, debt ratios), and the models need to be explainable to regulators. Gradient boosting models consistently outperform deep learning on these tasks, and SHAP explanations satisfy regulatory requirements for model transparency.
+
+**Healthcare and Clinical Decision Support**
+
+Predicting patient readmission, disease diagnosis from lab results, and treatment outcome modeling all benefit from tree-based approaches. Medical datasets are structured, often contain missing values (which trees handle natively), and clinicians need to understand why a model flagged a patient. A doctor will not trust a black-box prediction - but a SHAP waterfall plot showing that elevated white blood cell count and recent surgery drove the readmission risk is actionable.
+
+**E-Commerce and Recommendation Systems**
+
+Click-through rate prediction, customer churn modeling, and product ranking rely heavily on gradient boosting. These problems involve structured user behavior data (browsing history, purchase counts, session duration) with categorical features (device type, region, product category) - exactly where CatBoost and LightGBM shine. Most major e-commerce platforms use gradient boosting as a core component in their ranking systems.
+
+**Insurance and Actuarial Science**
+
+Claims prediction, pricing models, and risk stratification are natural fits. Insurance data is tabular with a mix of numeric and categorical features (age, vehicle type, region, claim history). The interpretability of tree-based models is critical here since actuaries need to justify pricing decisions.
+
+**Manufacturing and Predictive Maintenance**
+
+Predicting equipment failure from sensor readings, quality control classification, and supply chain optimization all work well with gradient boosting. Sensor data is structured and numeric, datasets can be large, and the models need to handle noisy real-world measurements.
+
+**Kaggle and Data Science Competitions**
+
+For any competition involving tabular data, gradient boosting remains the dominant approach. The vast majority of winning solutions on structured data use XGBoost, LightGBM, or CatBoost - often ensembled together.
+
+### Where Decision Trees Struggle
+
+**Computer Vision**
+
+Image classification, object detection, segmentation, and any task involving pixel-level data is the domain of convolutional neural networks and vision transformers. Trees cannot learn spatial hierarchies, edge detection, or translation invariance. A tree would treat each pixel as an independent feature, missing the spatial structure entirely. No amount of feature engineering makes trees competitive with deep learning on raw image data.
+
+**Natural Language Processing**
+
+Text classification, sentiment analysis, machine translation, and language generation require architectures that understand sequential context and semantic relationships. Transformers and large language models dominate this space. Trees can work on manually engineered text features (word counts, TF-IDF scores), but they cannot learn language representations from raw text the way neural networks can.
+
+**Audio and Speech Processing**
+
+Speech recognition, music generation, and audio classification require models that handle temporal sequences and frequency representations. Recurrent neural networks, transformers, and specialized audio models outperform trees on these tasks.
+
+**Time Series Forecasting (with caveats)**
+
+Trees cannot extrapolate beyond the range of training data. If your target has been steadily increasing and you need to predict future values above the training maximum, a tree will plateau at the highest value it has seen. Linear models and neural networks handle trends naturally. That said, trees can work well for time series classification and for forecasting when combined with proper feature engineering (lag features, rolling statistics, calendar features).
+
+**Very Small Datasets**
+
+With fewer than 100 training samples, tree-based models struggle to find meaningful splits and are prone to memorizing noise. Simple models like logistic regression, k-nearest neighbors, or even hand-crafted rules often generalize better. The power of ensembles comes from averaging over many patterns, and there simply are not enough patterns to learn from in tiny datasets.
+
+**Tasks Requiring Smooth Decision Boundaries**
+
+Trees partition feature space into axis-aligned rectangles. If the true decision boundary is a smooth curve or a diagonal line, trees approximate it with a staircase pattern. This requires many splits and deeper trees, increasing the risk of overfitting. Kernel methods (SVMs), Gaussian processes, and neural networks naturally produce smooth boundaries.
+
+**Real-Time Ultra-Low Latency Inference**
+
+A single decision tree is fast, but an ensemble of thousands of trees adds up. For applications requiring sub-millisecond inference (high-frequency trading, real-time bidding at massive scale), simpler linear models or distilled neural networks may be necessary. CatBoost's symmetric trees partially address this with lookup-table inference, but large ensembles still have overhead.
+
+### The Decision Framework
+
+As a general rule: if your data fits in a spreadsheet (rows and columns of structured features), try gradient boosting first. If your data is images, text, audio, or video, start with deep learning. If your dataset is tiny, start simple.
+
+The most common mistake is not choosing the wrong model family - it is spending weeks tuning a gradient boosting model on a problem that would be better served by a neural network, or vice versa.
+
+## Part 10: Classification Example
 
 To demonstrate that everything applies equally to classification, here is a comparison of all frameworks on the Breast Cancer dataset using ROC curves.
 
 ![ROC curves comparison across all frameworks](images/23_roc_curves_comparison.png)
 
 All frameworks achieve excellent AUC scores on this dataset. The differences between them are minimal here, which is typical for well-structured classification problems. The choice of framework matters more when dealing with large datasets, categorical features, or tight computational budgets.
-
----
 
 ## Summary
 
@@ -438,10 +474,9 @@ Tree-based models - from simple decision trees to modern gradient boosting frame
 - **XGBoost** brought regularization and engineering excellence. It remains a reliable default choice.
 - **LightGBM** optimized for speed with leaf-wise growth and clever sampling. Best for large datasets and fast experimentation.
 - **CatBoost** solved the categorical feature problem with ordered target statistics. Best when your data has many categorical columns.
+- **Know the boundaries.** Trees dominate structured data but are the wrong tool for images, text, audio, and tasks requiring extrapolation.
 
 Start simple, use early stopping, tune gradually, and always validate with SHAP that your model is learning the right patterns.
-
----
 
 ## References
 
