@@ -51,7 +51,11 @@ This repository contains an interactive Jupyter notebook that takes you from fou
 - Starting a new project workflow
 - Learning rate and tree count coupling
 - Reading learning curves
-- When NOT to use tree-based models
+
+### Part 9: Real-World Applications
+- Where trees excel: finance, healthcare, e-commerce, insurance, manufacturing
+- Where trees struggle: vision, NLP, audio, time series extrapolation
+- Decision framework for choosing the right model family
 
 ## Installation
 
@@ -59,8 +63,8 @@ This project uses [uv](https://github.com/astral-sh/uv) for dependency managemen
 
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd DecisionTrees
+git clone https://github.com/mark-allwyn/decision-trees.git
+cd decision-trees
 
 # Create virtual environment and install dependencies
 uv sync
@@ -98,9 +102,11 @@ Each section builds on previous concepts. The notebook includes:
 ## Project Structure
 
 ```
-DecisionTrees/
+decision-trees/
 ├── decision_trees_gradient_boosting_guide.ipynb  # Main tutorial notebook
-├── LEARNING_GUIDE.md                              # Companion learning material
+├── blog_article.md                               # Blog post with annotated visuals
+├── LEARNING_GUIDE.md                              # Companion learning reference
+├── images/                                        # Visualizations from the notebook
 ├── pyproject.toml                                 # Project dependencies
 ├── README.md                                      # This file
 └── .venv/                                         # Virtual environment
